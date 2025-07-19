@@ -19,6 +19,9 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 app.use(cookieParser());    
+app.get("/", (req, res) => {
+  res.send("Welcome to the Feedback Collection Platform API");
+});
 app.use("/api/v1/auth",authRoutes); 
 app.use("/api/v1/form",formRoutes);
 app.use(errorHandler);
