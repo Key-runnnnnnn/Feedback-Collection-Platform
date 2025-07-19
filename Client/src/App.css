@@ -1,0 +1,12 @@
+/* App-specific styles */
+#root {
+  width: 100%;
+}
+
+/* Make the app container take up the full height and width */
+body,
+html {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
