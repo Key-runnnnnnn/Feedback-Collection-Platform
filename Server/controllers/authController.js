@@ -22,17 +22,20 @@ export const signUp = async (req, res) => {
         const newUser = await User.create({ name, email, password: hashedPassword, role: "admin" });
         const token = generateToken(newUser._id);
         const isProduction = process.env.NODE_ENV === 'production';
+
+        // Set cookie
         res.cookie("token", token, {
             httpOnly: true,
             secure: isProduction, // Only secure in production (HTTPS)
             sameSite: isProduction ? "none" : "lax", // More permissive for localhost
             maxAge: 24 * 60 * 60 * 1000, //24 hours
         });
+
         return res.status(200).json({
             success: true,
             message: "User created successfully",
             user: newUser,
-            token: token,
+            token: token, // Also send token in response for fallback
         });
     } catch (error) {
         console.log(error);
@@ -69,17 +72,20 @@ export const login = async (req, res) => {
         }
         const token = generateToken(user._id);
         const isProduction = process.env.NODE_ENV === 'production';
+
+        // Set cookie
         res.cookie("token", token, {
             httpOnly: true,
             secure: isProduction, // Only secure in production (HTTPS)
             sameSite: isProduction ? "none" : "lax", // More permissive for localhost
             maxAge: 24 * 60 * 60 * 1000, //24 hours
         });
+
         return res.status(200).json({
             success: true,
             message: "User logged in successfully",
             user: user,
-            token: token,
+            token: token, // Also send token in response for fallback
         });
     } catch (error) {
         console.log(error);

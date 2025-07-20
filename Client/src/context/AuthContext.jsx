@@ -17,7 +17,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Check for saved user data in localStorage on initial load
     const savedUser = localStorage.getItem("user");
-    if (savedUser) {
+    const savedToken = localStorage.getItem("token");
+    if (savedUser && savedToken) {
       setCurrentUser(JSON.parse(savedUser));
     }
     setLoading(false);
@@ -31,6 +32,7 @@ export const AuthProvider = ({ children }) => {
       if (data.success) {
         setCurrentUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("token", data.token); // Store token for API requests
         toast.success("Logged in successfully");
         navigate("/dashboard");
         return true;
@@ -51,6 +53,7 @@ export const AuthProvider = ({ children }) => {
       if (data.success) {
         setCurrentUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("token", data.token); // Store token for API requests
         toast.success("Account created successfully");
         navigate("/dashboard");
         return true;
@@ -69,6 +72,7 @@ export const AuthProvider = ({ children }) => {
       await logoutUser();
       setCurrentUser(null);
       localStorage.removeItem("user");
+      localStorage.removeItem("token"); // Also remove token
       toast.success("Logged out successfully");
       navigate("/login");
     } catch (error) {
