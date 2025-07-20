@@ -21,10 +21,11 @@ export const signUp = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await User.create({ name, email, password: hashedPassword, role: "admin" });
         const token = generateToken(newUser._id);
+        const isProduction = process.env.NODE_ENV === 'production';
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: isProduction, // Only secure in production (HTTPS)
+            sameSite: isProduction ? "none" : "lax", // More permissive for localhost
             maxAge: 24 * 60 * 60 * 1000, //24 hours
         });
         return res.status(200).json({
@@ -67,10 +68,11 @@ export const login = async (req, res) => {
             });
         }
         const token = generateToken(user._id);
+        const isProduction = process.env.NODE_ENV === 'production';
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: isProduction, // Only secure in production (HTTPS)
+            sameSite: isProduction ? "none" : "lax", // More permissive for localhost
             maxAge: 24 * 60 * 60 * 1000, //24 hours
         });
         return res.status(200).json({
@@ -89,11 +91,12 @@ export const login = async (req, res) => {
 }
 
 export const logout = async (req, res) => {
+    const isProduction = process.env.NODE_ENV === 'production';
     res.cookie("token", null, {
         expires: new Date(Date.now()),
         httpOnly: true,
-        secure: true,
-        sameSite: "none",
+        secure: isProduction, // Only secure in production (HTTPS)
+        sameSite: isProduction ? "none" : "lax", // More permissive for localhost
     });
     return res.status(200).json({
         success: true,

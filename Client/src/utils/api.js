@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'https://feedback-collection-platform-server.onrender.com/api/v1';
+// Use environment variable if available, otherwise use production URL
+const API_URL = import.meta.env.VITE_API_URL || 'https://feedback-collection-platform-server.onrender.com/api/v1';
 
 // Create axios instance with credentials
 const api = axios.create({
