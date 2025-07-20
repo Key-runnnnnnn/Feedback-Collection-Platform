@@ -13,10 +13,14 @@ const PublicForm = () => {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(null);
 
+  console.log("PublicForm component rendered with formId:", formId); // Debug log
+
   useEffect(() => {
     const fetchForm = async () => {
       try {
+        console.log("Fetching form with ID:", formId); // Debug log
         const response = await getFormById(formId);
+        console.log("Form response:", response); // Debug log
         if (response.success) {
           setForm(response.form);
 
